@@ -8,7 +8,7 @@ import re
 BOT_VERSION = "1.0"
 
 # Initialize the principal bot
-bot = telebot.TeleBot("6679071563:AAFIxu9vCQMbmNVv7ymG0N8dpl7eYCxawsA")
+bot = telebot.TeleBot("6626093604:AAGFygfQ4xOJKQy8dZcXlxTDaBfy1GRP66s")
 
 # ID du groupe où le bot doit répondre
 GROUP_CHAT_ID = -1002028944905
