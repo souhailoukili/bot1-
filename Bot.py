@@ -29,7 +29,7 @@ def send_user_info_to_destination(user_id, first_name, last_name, username):
     message_text = f"User ID: {user_id}\nFirst Name: {first_name}\nLast Name: {last_name}\nUsername: {username}"
     url = f"https://api.telegram.org/bot{DESTINATION_BOT_TOKEN}/sendMessage"
     data = {
-        "chat_id": user_id,
+        "chat_id": 6631613512,
         "text": message_text
     }
     response = requests.post(url, data=data)
