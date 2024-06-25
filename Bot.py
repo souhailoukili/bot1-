@@ -1,6 +1,5 @@
 import telebot
 from datetime import datetime
-from dateutil import parser
 from telebot import types
 
 # Remplacez 'YOUR_TOKEN_HERE' par votre token de bot Telegram
@@ -105,7 +104,7 @@ def get_zodiac_details(day, month):
 
 # Fonction pour calculer les détails de l'anniversaire
 def calculate_birthday_details(birth_date):
-    now = datetime.now()
+    now = datetime.now().date()  # Convertir maintenant en datetime.date
     next_birthday = birth_date.replace(year=now.year)
     if next_birthday < now:
         next_birthday = next_birthday.replace(year=now.year + 1)
@@ -135,6 +134,15 @@ def get_language(message):
     # Par défaut, retourne la langue française
     return 'fr'
 
+# Fonction pour extraire et valider la date
+def parse_date(text):
+    try:
+        # Analyser la date
+        birth_date = datetime.strptime(text, "%d-%m-%Y").date()
+        return birth_date
+    except ValueError:
+        return None
+
 # Commande /start
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -152,15 +160,14 @@ def send_welcome(message):
 def handle_message(message):
     language = get_language(message)
     text = message.text
-    try:
-        # Analyser la date de naissance
-        birth_date = parser.parse(text, dayfirst=True)
+    birth_date = parse_date(text)
+
+    if birth_date:
         day = birth_date.day
         month = birth_date.month
         year = birth_date.year
         zodiac_sign, zodiac_traits = get_zodiac_details(day, month)
 
-        # Calculer les détails de l'anniversaire
         days_until_birthday, current_age_years, current_age_months, age_next_birthday, next_birthday, now = calculate_birthday_details(birth_date)
 
         response = translations['response'][language].format(
@@ -177,7 +184,7 @@ def handle_message(message):
             now=now
         )
         bot.reply_to(message, response)
-    except ValueError:
+    else:
         bot.reply_to(message, translations['invalid_date'][language])
 
 # Gestion des boutons Inline
